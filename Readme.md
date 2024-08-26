@@ -13,4 +13,4 @@
 - [Lesson_13](https://github.com/makurea/Aston/tree/Lesson_13) - Ветка с пятым домашним заданием.
 - [Lesson_14_junit_5](https://github.com/makurea/Aston/tree/Lesson_14_junit_5) - Ветка с шестым домашним заданием. 
 - [Lesson_14_testng](https://github.com/makurea/Aston/tree/Lesson_14_testng) - Ветка с шестым домашним заданием. 
-
+- [Lesson_15](https://github.com/makurea/Aston/tree/Lesson_15) - Ветка с седьмым домашним заданием.
