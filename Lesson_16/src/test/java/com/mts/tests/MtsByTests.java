@@ -32,18 +32,30 @@ public class MtsByTests {
     }
 
     @Test
-    public void testCheckTitle() {
+    public void testCheckBlockTitle() {
         homePage.acceptCookies();
+        homePage.openDropdown();
+        homePage.selectServiceOption("Услуги связи");
 
-        String expectedTitle = "МТС – мобильный оператор в Беларуси";
-        String actualTitle = driver.getTitle();
-        assertEquals(expectedTitle, actualTitle, "Название страницы не совпадает.");
+        String actualBlockTitle = homePage.getBlockTitle();
+        String expectedBlockTitle = "Онлайн пополнение без комиссии";
+        assertEquals(expectedBlockTitle, actualBlockTitle, "Заголовок блока не совпадает.");
     }
 
     @Test
-    public void testCheckBlockTitle() {
+    public void testPaymentSystemLogos() {
         homePage.acceptCookies();
+        homePage.openDropdown();
+        homePage.selectServiceOption("Услуги связи");
 
+        assertTrue(homePage.isVisaLogoDisplayed(), "Логотип Visa не найден.");
+        assertTrue(homePage.isMastercardLogoDisplayed(), "Логотип MasterCard не найден.");
+        assertTrue(homePage.isBelkartLogoDisplayed(), "Логотип Белкарт не найден.");
+    }
+
+    @Test
+    public void testCheckPlaceholders() {
+        homePage.acceptCookies();
         homePage.openDropdown();
         homePage.selectServiceOption("Услуги связи");
 

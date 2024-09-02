@@ -19,6 +19,15 @@ public class HomePage {
     // Локатор для кнопки принятия cookie
     private By cookieAcceptButton = By.id("cookie-agree");
 
+    // Локатор для заголовка блока
+    private By blockTitleLocator = By.cssSelector(".pay__wrapper h2");
+
+    // Локаторы для логотипов платежных систем
+    private By logoContainer = By.cssSelector(".pay__partners ul");
+    private By visaLogo = By.cssSelector("img[alt='Visa']");
+    private By mastercardLogo = By.cssSelector("img[alt='MasterCard']");
+    private By belkartLogo = By.cssSelector("img[alt='Белкарт']");
+
     public HomePage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -45,5 +54,25 @@ public class HomePage {
 
     public void closeWindow() {
         wait.until(ExpectedConditions.elementToBeClickable(closeButton)).click();
+    }
+
+    public String getBlockTitle() {
+        WebElement blockElement = wait.until(ExpectedConditions.visibilityOfElementLocated(blockTitleLocator));
+        return blockElement.getText().replace("\n", " ").replace("\u00A0", " ").trim();
+    }
+
+    public boolean isVisaLogoDisplayed() {
+        WebElement logosElement = wait.until(ExpectedConditions.visibilityOfElementLocated(logoContainer));
+        return logosElement.findElement(visaLogo) != null;
+    }
+
+    public boolean isMastercardLogoDisplayed() {
+        WebElement logosElement = wait.until(ExpectedConditions.visibilityOfElementLocated(logoContainer));
+        return logosElement.findElement(mastercardLogo) != null;
+    }
+
+    public boolean isBelkartLogoDisplayed() {
+        WebElement logosElement = wait.until(ExpectedConditions.visibilityOfElementLocated(logoContainer));
+        return logosElement.findElement(belkartLogo) != null;
     }
 }
