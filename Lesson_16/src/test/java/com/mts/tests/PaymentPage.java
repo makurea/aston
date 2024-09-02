@@ -2,8 +2,10 @@ package com.mts.tests;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.JavascriptExecutor;
 
 import java.time.Duration;
 
@@ -11,7 +13,7 @@ public class PaymentPage {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    // Локаторы для формы "Услуги связи"
+    // Локаторы для формы Услуги связи
     private By phoneInput = By.id("connection-phone");
     private By sumInput = By.id("connection-sum");
     private By emailInput = By.id("connection-email");
@@ -22,6 +24,15 @@ public class PaymentPage {
     private By sumPlaceholder = By.id("connection-sum");
     private By emailPlaceholder = By.id("connection-email");
 
+    // Локаторы для формы Домашний интернет
+    private By internetPhonePlaceholder = By.id("internet-phone");
+
+    // Локаторы для формы Рассрочка
+    private By installmentPhonePlaceholder = By.id("score-instalment");
+
+    // Локаторы для формы Задолженность
+    private By debtPhonePlaceholder = By.id("score-arrears");
+
     // Локатор для iframe оплаты
     private By paymentIFrame = By.xpath("//iframe[@class='bepaid-iframe']");
 
@@ -29,10 +40,6 @@ public class PaymentPage {
     private By displayedPhone = By.cssSelector(".pay-description__text span");
     private By displayedSum = By.cssSelector(".pay-description__cost span");
     private By paymentButton = By.cssSelector(".colored");
-
-    // Локаторы для платежных систем
-    private By googlePayButton = By.id("gpay-button-online-api-id");
-    private By yandexPayButton = By.id("yandex-button");
 
     public PaymentPage(WebDriver driver) {
         this.driver = driver;
@@ -61,6 +68,18 @@ public class PaymentPage {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(emailPlaceholder)).getAttribute("placeholder");
     }
 
+    public String getInternetPhonePlaceholderText() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(internetPhonePlaceholder)).getAttribute("placeholder");
+    }
+
+    public String getInstallmentPhonePlaceholderText() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(installmentPhonePlaceholder)).getAttribute("placeholder");
+    }
+
+    public String getDebtPhonePlaceholderText() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(debtPhonePlaceholder)).getAttribute("placeholder");
+    }
+
     public boolean isPaymentDetailsWindowDisplayed() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(paymentIFrame)).isDisplayed();
     }
@@ -86,10 +105,16 @@ public class PaymentPage {
     }
 
     public boolean isGooglePayButtonDisplayed() {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(googlePayButton)).isDisplayed();
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("gpay-button-online-api-id"))).isDisplayed();
     }
 
     public boolean isYandexPayButtonDisplayed() {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(yandexPayButton)).isDisplayed();
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("yandex-button"))).isDisplayed();
+    }
+
+    // Метод для прокрутки до элемента
+    public void scrollToElement(By locator) {
+        WebElement element = driver.findElement(locator);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
     }
 }

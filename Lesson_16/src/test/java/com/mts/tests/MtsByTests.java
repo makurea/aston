@@ -4,9 +4,13 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 import java.time.Duration;
 
@@ -31,6 +35,9 @@ public class MtsByTests {
         paymentPage = new PaymentPage(driver);
     }
 
+    /**
+     * Проверяет название указанного блока
+     */
     @Test
     public void testCheckBlockTitle() {
         homePage.acceptCookies();
@@ -42,6 +49,9 @@ public class MtsByTests {
         assertEquals(expectedBlockTitle, actualBlockTitle, "Заголовок блока не совпадает.");
     }
 
+    /**
+     * Проверяет наличие логотипов платёжных систем
+     */
     @Test
     public void testPaymentSystemLogos() {
         homePage.acceptCookies();
@@ -53,21 +63,67 @@ public class MtsByTests {
         assertTrue(homePage.isBelkartLogoDisplayed(), "Логотип Белкарт не найден.");
     }
 
+    /**
+     * Проверяет работу ссылки Подробнее о сервисе
+     */
     @Test
-    public void testCheckPlaceholders() {
+    public void testMoreAboutServiceLink() {
         homePage.acceptCookies();
         homePage.openDropdown();
         homePage.selectServiceOption("Услуги связи");
 
-        String actualPhonePlaceholder = paymentPage.getPhonePlaceholderText();
-        String actualSumPlaceholder = paymentPage.getSumPlaceholderText();
-        String actualEmailPlaceholder = paymentPage.getEmailPlaceholderText();
+        By moreInfoLink = By.xpath("//a[text()='Подробнее о сервисе']");
+        WebElement linkElement = wait.until(ExpectedConditions.elementToBeClickable(moreInfoLink));
+        String expectedUrl = "https://www.mts.by/help/poryadok-oplaty-i-bezopasnost-internet-platezhey/";
+        linkElement.click();
 
-        assertEquals("Номер телефона", actualPhonePlaceholder, "Плейсхолдер поля телефона не совпадает.");
-        assertEquals("Сумма", actualSumPlaceholder, "Плейсхолдер поля суммы не совпадает.");
-        assertEquals("E-mail для отправки чека", actualEmailPlaceholder, "Плейсхолдер поля email не совпадает.");
+        String currentUrl = driver.getCurrentUrl();
+        assertEquals(expectedUrl, currentUrl, "URL после нажатия на ссылку не соответствует ожидаемому.");
     }
 
+    /**
+     * Проверяет надписи в незаполненных полях каждого варианта оплаты услуг
+     */
+    @Test
+    public void testCheckPlaceholdersForAllPaymentOptions() {
+        // Принятие cookies
+        homePage.acceptCookies();
+
+        // Проверка для услуги связи
+        homePage.openDropdown();
+        homePage.selectServiceOption("Услуги связи");
+
+        // Прокрутка до формы
+        paymentPage.scrollToElement(By.id("connection-phone"));
+
+        // Проверка плейсхолдеров
+        assertEquals("Номер телефона", paymentPage.getPhonePlaceholderText(), "Плейсхолдер для услуги связи неверен.");
+        assertEquals("Сумма", paymentPage.getSumPlaceholderText(), "Плейсхолдер для суммы неверен.");
+        assertEquals("E-mail для отправки чека", paymentPage.getEmailPlaceholderText(), "Плейсхолдер для email неверен.");
+
+        // Прокрутка до формы домашнего интернета
+        homePage.selectInternetOption();
+        paymentPage.scrollToElement(By.id("internet-phone"));
+
+        assertEquals("Номер абонента", paymentPage.getInternetPhonePlaceholderText(), "Плейсхолдер для домашнего интернета неверен.");
+
+        // Прокрутка до формы рассрочки
+        homePage.selectInstallmentOption();
+        paymentPage.scrollToElement(By.id("score-instalment"));
+
+        assertEquals("Номер счета на 44", paymentPage.getInstallmentPhonePlaceholderText(), "Плейсхолдер для рассрочки неверен.");
+
+        // Прокрутка до формы задолженности
+        homePage.selectDebtOption();  // метод с прокруткой и кликом
+        paymentPage.scrollToElement(By.id("score-arrears"));
+
+        assertEquals("Номер счета на 2073", paymentPage.getDebtPhonePlaceholderText(), "Плейсхолдер для задолженности неверен.");
+    }
+
+
+    /**
+     * Проверяет работу кнопки продолжить и корректность отображения информации
+     */
     @Test
     public void testOnlinePaymentForm() {
         homePage.acceptCookies();
@@ -110,4 +166,6 @@ public class MtsByTests {
         }
         return amount + " BYN";
     }
+
+
 }

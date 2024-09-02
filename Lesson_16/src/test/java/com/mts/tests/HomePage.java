@@ -1,6 +1,7 @@
 package com.mts.tests;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -52,8 +53,22 @@ public class HomePage {
         wait.until(ExpectedConditions.elementToBeClickable(optionLocator)).click();
     }
 
-    public void closeWindow() {
-        wait.until(ExpectedConditions.elementToBeClickable(closeButton)).click();
+    public void selectInternetOption() {
+        selectServiceOption("Домашний интернет");
+    }
+
+    public void selectInstallmentOption() {
+        selectServiceOption("Рассрочка");
+    }
+
+    public void selectDebtOption() {
+        WebElement debtOption = driver.findElement(By.xpath("//p[text()='Задолженность']"));
+
+        // Прокрутка к элементу
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", debtOption);
+
+        // Клик по элементу
+        debtOption.click();
     }
 
     public String getBlockTitle() {
