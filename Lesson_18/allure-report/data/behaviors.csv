@@ -1,0 +1,6 @@
+"BROKEN","EPIC","FAILED","FEATURE","PASSED","SKIPPED","STORY","UNKNOWN"
+"0","MTS Website Tests","0","Payment System Logos Verification","1","0","Check the presence of payment system logos on the Services page","0"
+"0","MTS Website Tests","0","More About Service Link","1","0","Check the URL of the 'More About Service' link","0"
+"0","MTS Website Tests","0","Block Title Verification","1","0","Check the block title after navigating to the Services page","0"
+"0","MTS Website Tests","0","Placeholder Text Verification","1","0","Check the placeholder text in various payment forms","0"
+"0","MTS Website Tests","0","Online Payment Form","1","0","Verify online payment form functionality","0"
